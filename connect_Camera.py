@@ -8,10 +8,13 @@ def stream_video():
     picam.preview_configuration.align()
     picam.configure("preview")
     picam.start()
-
+    n_imagen = 1
     while True:
         frame = picam.capture_array()
         cv2.imshow("picam", frame)
+        if cv2.waitKey(1) & 0xFF == ord('h'):
+            cv2.imwrite(f'Imagen_circulos{n_imagen}.jpg', frame)
+            n_imagen += 1
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     cv2.destroyAllWindows()
