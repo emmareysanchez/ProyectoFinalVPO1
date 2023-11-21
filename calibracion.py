@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import time
 
 # Tamaño del tablero circular (filas, columnas)
-circle_board_size = (4, 5)
+circle_board_size = (5, 4)
 circle_size_mm = 50
 circle_distance_centre_cm = 5
 
@@ -24,18 +24,16 @@ image_files = glob.glob(f'{image_folder}/*.jpg')  # Puedes ajustar la extensión
 for image in image_files:
     # Leer la imagen
     img = cv2.imread(image)
-    imagen_circulos = img.copy()
+    imagen_circulos = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # Intentar encontrar el patrón de círculos en la imagen
     ret, corners = cv2.findCirclesGrid(gray, circle_board_size, flags=cv2.CALIB_CB_SYMMETRIC_GRID)
-    print(ret, corners)
+    print(image, ret)
     for i in corners:
-        print(1, i[0], type(i[0][0]), type(i[0][1]))
         cv2.circle(imagen_circulos, tuple(map(int, i[0])), 2, (0, 255, 0), -1)
     plt.imshow(imagen_circulos)
     plt.show()
-    time.sleep(1)
 
 
 
