@@ -36,7 +36,7 @@ def stream_video(calibration_file):
     camera_matrix, dist_coeffs = load_calibration_params(calibration_file)
 
     # Cargar la imagen de referencia
-    template_image = cv2.imread('ruta_de_tu_imagen_de_referencia.jpg', cv2.IMREAD_COLOR)
+    template_image = cv2.imread('ImagenesObjetos/Nutella.jpg', cv2.IMREAD_COLOR)
     h, w = template_image.shape[:2]
 
     n_imagen = 1

@@ -18,10 +18,9 @@ def calibracion():
     img_points = []  # Coordenadas 2D en la imagen
 
     # Obtener la lista de nombres de archivos de imágenes en la carpeta
-    image_folder = 'Imagen_circulos3<'  # Reemplaza con la ruta de tu carpeta
+    image_folder = 'ImagenesCirculos/'  # Reemplaza con la ruta de tu carpeta
     # image_folder = 'ImagenesCalibracion/'  # Reemplaza con la ruta de tu carpeta
     image_files = glob.glob(f'{image_folder}*.jpg')  # Puedes ajustar la extensión de archivo según tus imágenes
-    print(image_files)
     for image in image_files:
         # Leer la imagen
         img = cv2.imread(image)
@@ -35,8 +34,6 @@ def calibracion():
             cv2.circle(imagen_circulos, tuple(map(int, i[0])), 2, (0, 255, 0), -1)
         plt.imshow(imagen_circulos)
         plt.show()
-
-
 
         if ret:
             obj_points.append(objp)
