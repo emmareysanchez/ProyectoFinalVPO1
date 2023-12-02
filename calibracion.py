@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 def calibracion():
     circle_board_size = (5, 4) # Tamaño del tablero circular
     circle_size_mm = 50
-    circle_distance_centre_cm = 5
 
     # Crear objeto para almacenar las coordenadas 3D del tablero circular
     objp = np.zeros((circle_board_size[0] * circle_board_size[1], 3), np.float32)
