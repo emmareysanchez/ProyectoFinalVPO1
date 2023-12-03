@@ -109,6 +109,9 @@ def contar_objetos(calibration_file, templates):
         
         key = cv2.waitKey(1) & 0xFF
         if key == ord('q'):
+            print(f'Se han contado {contador_productos[0]} nutellas.')
+            print(f'Se han contado {contador_productos[1]} mermeladas.')
+            print(f'Se han contado {contador_productos[2]} mantequillas de cacahuete.')
             break
 
 if __name__ == '__main__':
