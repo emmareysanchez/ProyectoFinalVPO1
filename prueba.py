@@ -102,7 +102,7 @@ def contar_objetos(calibration_file, templates):
             if not flag_productos[producto]:
                 flag_productos = [False for _ in range(len(templates))]
                 contador_productos[producto] += 1
-                flag_productos = [producto] = True
+                flag_productos[producto] = True
                 print(producto)
 
         cv2.imshow("picam", undistorted_frame)
@@ -112,4 +112,8 @@ def contar_objetos(calibration_file, templates):
             break
 
 if __name__ == '__main__':
-    contar_objetos
+    imgN = cv2.imread('ImagenesObjetos/Nutella.jpg',cv2.IMREAD_GRAYSCALE)
+    imgM = cv2.imread('ImagenesObjetos/Mermelada.jpg',cv2.IMREAD_GRAYSCALE)
+    imgC = cv2.imread('ImagenesObjetos/Cacahuete.jpg',cv2.IMREAD_GRAYSCALE)
+    templates = [imgN, imgM, imgC]
+    contar_objetos('parametros_calibracion.npz', templates)
