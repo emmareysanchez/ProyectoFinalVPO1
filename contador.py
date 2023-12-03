@@ -113,6 +113,7 @@ def contar_objetos(calibration_file, templates):
             print(f'Cantidad de tarros de mermeladas: {contador_productos[1]}.')
             print(f'Cantidad de tarros de mantequillas de cacahuete: {contador_productos[2]}.')
             break
+    return contador_productos[0], contador_productos[1], [2]
 
 
 if __name__ == '__main__':
@@ -120,4 +121,4 @@ if __name__ == '__main__':
     imgM = cv2.imread('ImagenesObjetos/Mermelada.jpg',cv2.IMREAD_GRAYSCALE)
     imgC = cv2.imread('ImagenesObjetos/Cacahuete.jpg',cv2.IMREAD_GRAYSCALE)
     templates = [imgN, imgM, imgC]
-    contar_objetos('parametros_calibracion.npz', templates)
+    
