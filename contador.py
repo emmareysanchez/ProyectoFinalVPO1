@@ -69,7 +69,7 @@ def dibujar_rectangulo(frame, templates):
         pts_frame_rect = cv2.perspectiveTransform(pts_template_rect, M)
     
         # Dibujar el rectángulo alrededor del objeto en el frame
-        frame = cv2.polylines(frame, [np.int32(pts_frame_rect)], True, (0, 255, 0), 2)
+        frame = cv2.polylines(frame, [np.int32(pts_frame_rect)], True, (0, 0, 255), 2)
 
     return frame, producto
 
@@ -93,7 +93,7 @@ def contar_objetos(calibration_file, templates):
         undistorted_frame = undistort_image(frame, camera_matrix, dist_coeffs)
         undistorted_frame, producto = dibujar_rectangulo(undistorted_frame, templates)
         if producto == -1:
-            if contador < 5:
+            if contador < 2:
                 contador += 1
             else:
                 flag_productos = [False for _ in range(len(templates))]
@@ -109,10 +109,11 @@ def contar_objetos(calibration_file, templates):
         
         key = cv2.waitKey(1) & 0xFF
         if key == ord('q'):
-            print(f'Se han contado {contador_productos[0]} nutellas.')
-            print(f'Se han contado {contador_productos[1]} mermeladas.')
-            print(f'Se han contado {contador_productos[2]} mantequillas de cacahuete.')
+            print(f'Cantidad de tarros de nutellas: {contador_productos[0]}.')
+            print(f'Cantidad de tarros de mermeladas: {contador_productos[1]}.')
+            print(f'Cantidad de tarros de mantequillas de cacahuete: {contador_productos[2]}.')
             break
+
 
 if __name__ == '__main__':
     imgN = cv2.imread('ImagenesObjetos/Nutella.jpg',cv2.IMREAD_GRAYSCALE)
