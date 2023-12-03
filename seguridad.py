@@ -1,4 +1,4 @@
-from picamera2 import PiCamera2
+from picamera import PiCamera
 from time import sleep
 import numpy as np
 import cv2
