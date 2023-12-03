@@ -1,30 +1,15 @@
-from picamera import PiCamera
+from picamera2 import Picamera2
 from time import sleep
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-# VERIFICAR EN QUE ESPACIO DE COLOR ESTAN LAS IMAGENES
-
-
-# carga de imagenes y las convierte a RGB
-# img_rojo = cv2.imread('ImagenesSeguridad/rojo.jpg')
-# img_rojo = cv2.cvtColor(img_rojo, cv2.COLOR_BGR2RGB)
-
-# img_azul = cv2.imread('ImagenesSeguridad/azul.jpg')
-# img_azul = cv2.cvtColor(img_azul, cv2.COLOR_BGR2RGB)
-
-# img_verde = cv2.imread('ImagenesSeguridad/verde.jpeg')
-# img_verde = cv2.cvtColor(img_verde, cv2.COLOR_BGR2RGB)
-
-# img_amarillo = cv2.imread('ImagenesSeguridad/amarillo.jpg')
-# img_amarillo = cv2.cvtColor(img_amarillo, cv2.COLOR_BGR2RGB)
 
 
 # filtro azul
 def filtrado_azul(img):
     limite_inferior = np.array([100, 100, 100] )
     limite_superior = np.array([140, 255, 255])
-    imagen_hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+    imagen_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     filtro = cv2.inRange(imagen_hsv, limite_inferior, limite_superior)
     parecido = sum(sum(filtro // 255))
     return parecido
@@ -34,7 +19,7 @@ def filtrado_azul(img):
 def filtrado_rojo(img):
     limite_inferior = np.array([0, 50, 50] )
     limite_superior = np.array([20, 255, 255])
-    imagen_hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+    imagen_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     filtro = cv2.inRange(imagen_hsv, limite_inferior, limite_superior)
     parecido = sum(sum(filtro // 255))
     return parecido
@@ -44,7 +29,7 @@ def filtrado_rojo(img):
 def filtrado_amarillo(img):
     limite_inferior = np.array([0, 100, 100] )
     limite_superior = np.array([50, 255, 255])
-    imagen_hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+    imagen_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     filtro = cv2.inRange(imagen_hsv, limite_inferior, limite_superior)
     parecido = sum(sum(filtro // 255))
     return parecido
@@ -54,7 +39,7 @@ def filtrado_amarillo(img):
 def filtrado_verde(img):
     limite_inferior = np.array([20, 50, 50] )
     limite_superior = np.array([80, 255, 255])
-    imagen_hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+    imagen_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     filtro = cv2.inRange(imagen_hsv, limite_inferior, limite_superior)
     parecido = sum(sum(filtro // 255))
     return parecido
@@ -65,7 +50,6 @@ def establecer_color(imagen):
     azul = 2
     amarillo = 3
     rojo = 4
-
     filtro_verde = filtrado_verde(imagen)
     fitro_azul = filtrado_azul(imagen)
     filtro_rojo = filtrado_rojo(imagen)
@@ -93,16 +77,19 @@ def verificar_combinacion(imagenes) -> bool:
         lista_colores.append(establecer_color(img))
     if lista_colores == combinacion:
         verificacion = True
+        mensaje = 'Combinacion correcta'
     else:
         verificacion = False
+        mensaje = 'Combinacion Incorrecta'
+    print(mensaje)
     return verificacion
 
 
 def load_calibration_params(file_path):
     try:
         calibration_data = np.load(file_path)
-        camera_matrix = calibration_data['camera_matrix']
-        dist_coeffs = calibration_data['dist_coeffs']
+        camera_matrix = calibration_data['mtx']
+        dist_coeffs = calibration_data['dist']
         return camera_matrix, dist_coeffs
     except Exception as e:
         print(f"Error loading calibration parameters: {e}")
@@ -115,7 +102,6 @@ def undistort_image(image, camera_matrix, dist_coeffs):
     undistorted_image = cv2.undistort(image, camera_matrix, dist_coeffs, None, new_camera_matrix)
     return undistorted_image
 
-# VERIFICAR EN QUE ESPACIO DE COLOR ESTAN LAS IMAGENES
 def introducir_codigo(calibration_file):
     # Conectamos la camara y la configuramos
     picam = Picamera2()
@@ -125,6 +111,7 @@ def introducir_codigo(calibration_file):
     picam.configure("preview")
     picam.start()
     imagenes = list()
+    combinacion_correcta = False
     # Cargar parámetros de calibración
     camera_matrix, dist_coeffs = load_calibration_params(calibration_file)
     while True:
@@ -135,6 +122,7 @@ def introducir_codigo(calibration_file):
         key = cv2.waitKey(1) & 0xFF
         if key == ord(' '):
             # Mandar imagen
+            print(establecer_color(undistorted_frame))
             imagenes.append(undistorted_frame)
             if len(imagenes) == 6:
                 combinacion_correcta = verificar_combinacion(imagenes)

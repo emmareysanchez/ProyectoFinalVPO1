@@ -28,11 +28,8 @@ def calibracion():
 
         # Intentar encontrar el patrón de círculos en la imagen
         ret, corners = cv2.findCirclesGrid(gray, circle_board_size, flags=cv2.CALIB_CB_SYMMETRIC_GRID)
-        print(image, ret)
         for i in corners:
             cv2.circle(imagen_circulos, tuple(map(int, i[0])), 2, (0, 255, 0), -1)
-        plt.imshow(imagen_circulos)
-        plt.show()
 
         if ret:
             obj_points.append(objp)
@@ -41,9 +38,11 @@ def calibracion():
     # Calibrar la cámara
     ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(obj_points, img_points, gray.shape[::-1], None, None)
 
+    nombre = 'parametros_calibracion.npz'
+
     # Guardar los parámetros de calibración en un archivo
-    np.savez('parametros_calibracion.npz', mtx=mtx, dist=dist)
+    np.savez(nombre, mtx=mtx, dist=dist)
 
-    print('Calibración completada. Parámetros guardados en parametros_calibracion.npz')
+    print(f'Calibración completada. Parámetros guardados en {nombre}')
+    return nombre
 
-calibracion()
