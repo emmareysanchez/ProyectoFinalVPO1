@@ -27,23 +27,6 @@ def encontrar_matches(img1, img2):
     return good, kp1, kp2
 
 
-# def encontrar_matches(img1, img2):
-#     # Initiate SIFT detector
-#     sift = cv2.SIFT_create()
-#     # find the keypoints and descriptors with SIFT
-#     kp1, des1 = sift.detectAndCompute(img1,None)
-#     kp2, des2 = sift.detectAndCompute(img2,None)
-#     # BFMatcher with default params
-#     bf = cv2.BFMatcher()
-#     matches = bf.knnMatch(des1,des2,k=2)
-#     # Apply ratio test
-#     good = []
-#     for m,n in matches:
-#         if m.distance < 0.60*n.distance:
-#             good.append(m)
-#     return good, kp1, kp2
-
-
 def objeto_en_frame(frame, templates):
     matches_list = []
     for i, template in enumerate(templates):
@@ -52,22 +35,9 @@ def objeto_en_frame(frame, templates):
 
     matches_list.sort(key=lambda x: len(x[1][0]), reverse=True)
     producto, matches = matches_list[0][0], matches_list[0][1]
-    if len(matches[0]) <= 20:
+    if len(matches[0]) < 15:
         producto, matches = -1, [[], None, None]
     return producto, matches
-
-
-# def objeto_en_frame(frame, templates):
-#     matriz_matches = list()
-#     for i in range(len(templates)):
-#         matriz_matches.append([i, encontrar_matches(frame, templates[i])])
-#     matches = [list(), None, None]
-#     producto = -1
-#     for i in matriz_matches:
-#         if len(matches[0]) < len(i[1][0]) and len(i[1][0]) > 20:
-#             matches = i[1]
-#             producto = i[0]
-#     return producto, matches
 
 
 def dibujar_rectangulo(frame, templates):
@@ -138,7 +108,7 @@ def contar_objetos(calibration_file, templates):
 
 if __name__ == '__main__':
     imgN = cv2.imread('ImagenesObjetos/Nutella.jpg',cv2.IMREAD_GRAYSCALE)
-    imgM = cv2.imread('ImagenesObjetos/Mermelada.png',cv2.IMREAD_GRAYSCALE)
+    imgM = cv2.imread('ImagenesObjetos/Mermelada2.png',cv2.IMREAD_GRAYSCALE)
     imgC = cv2.imread('ImagenesObjetos/Cacahuete.jpg',cv2.IMREAD_GRAYSCALE)
     templates = [imgN, imgM, imgC]
     n_nutella, n_mermelada, n_cacahuete = contar_objetos('parametros_calibracion.npz', templates)
