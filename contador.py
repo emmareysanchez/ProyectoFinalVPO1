@@ -138,7 +138,7 @@ def contar_objetos(calibration_file, templates):
 
 if __name__ == '__main__':
     imgN = cv2.imread('ImagenesObjetos/Nutella.jpg',cv2.IMREAD_GRAYSCALE)
-    imgM = cv2.imread('ImagenesObjetos/Mermelada.jpg',cv2.IMREAD_GRAYSCALE)
+    imgM = cv2.imread('ImagenesObjetos/Mermelada.png',cv2.IMREAD_GRAYSCALE)
     imgC = cv2.imread('ImagenesObjetos/Cacahuete.jpg',cv2.IMREAD_GRAYSCALE)
     templates = [imgN, imgM, imgC]
     n_nutella, n_mermelada, n_cacahuete = contar_objetos('parametros_calibracion.npz', templates)
