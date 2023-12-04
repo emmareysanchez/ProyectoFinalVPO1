@@ -25,16 +25,6 @@ def filtrado_rojo(img):
     return parecido
 
 
-# filtro amarillo
-def filtrado_amarillo(img):
-    limite_inferior = np.array([0, 100, 100] )
-    limite_superior = np.array([50, 255, 255])
-    imagen_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    filtro = cv2.inRange(imagen_hsv, limite_inferior, limite_superior)
-    parecido = sum(sum(filtro // 255))
-    return parecido
-
-
 # filtro verde
 def filtrado_verde(img):
     limite_inferior = np.array([20, 50, 50] )
@@ -48,29 +38,27 @@ def filtrado_verde(img):
 def establecer_color(imagen):
     verde = 1
     azul = 2
-    amarillo = 3
-    rojo = 4
+    # amarillo = 3
+    rojo = 3
     filtro_verde = filtrado_verde(imagen)
     fitro_azul = filtrado_azul(imagen)
     filtro_rojo = filtrado_rojo(imagen)
-    filtro_amarillo = filtrado_amarillo(imagen)
+    # filtro_amarillo = filtrado_amarillo(imagen)
 
-    if fitro_azul > filtro_rojo and fitro_azul > filtro_amarillo and fitro_azul > filtro_verde:
+    if fitro_azul > filtro_rojo and fitro_azul > filtro_verde:
         return azul
-    elif filtro_rojo > fitro_azul and filtro_rojo > filtro_amarillo and filtro_rojo > filtro_verde:
+    elif filtro_rojo > fitro_azul and filtro_rojo > filtro_verde:
         return rojo
-    elif filtro_amarillo > fitro_azul and filtro_amarillo > filtro_rojo and filtro_amarillo > filtro_verde:
-        return amarillo
-    elif filtro_verde > fitro_azul and filtro_verde > filtro_rojo and filtro_verde > filtro_amarillo:
+    elif filtro_verde > fitro_azul and filtro_verde > filtro_rojo:
         return verde
     else:
         return 0
 
 
 def verificar_combinacion(imagenes) -> bool:
-    # combinacion: azul, amarillo, rojo, rojo, verde, azul
-    # verde = 1, azul = 2, amarillo = 3, rojo = 4
-    combinacion = [2, 3, 4, 4, 1, 2]
+    # combinacion: azul, rojo, rojo, verde, azul
+    # verde = 1, azul = 2, rojo = 3
+    combinacion = [2, 3, 3, 1, 2]
     lista_colores = list()
     for i in range(len(imagenes)):
         img = imagenes[i]
@@ -124,9 +112,10 @@ def introducir_codigo(calibration_file):
             # Mandar imagen
             print(establecer_color(undistorted_frame))
             imagenes.append(undistorted_frame)
-            if len(imagenes) == 6:
+            if len(imagenes) == 5:
                 combinacion_correcta = verificar_combinacion(imagenes)
                 imagenes = list()
         if combinacion_correcta:
             break
+    picam.close()
 

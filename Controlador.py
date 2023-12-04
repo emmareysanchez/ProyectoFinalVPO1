@@ -5,7 +5,7 @@ import cv2
 
 if __name__ == '__main__':
     imgN = cv2.imread('ImagenesObjetos/Nutella.jpg', cv2.IMREAD_GRAYSCALE)
-    imgM = cv2.imread('ImagenesObjetos/Mermelada.jpg', cv2.IMREAD_GRAYSCALE)
+    imgM = cv2.imread('ImagenesObjetos/Mermelada.png', cv2.IMREAD_GRAYSCALE)
     imgC = cv2.imread('ImagenesObjetos/Cacahuete.jpg', cv2.IMREAD_GRAYSCALE)
     templates = [imgN, imgM, imgC]
 

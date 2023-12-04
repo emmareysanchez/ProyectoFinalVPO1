@@ -104,4 +104,5 @@ def contar_objetos(calibration_file, templates):
         key = cv2.waitKey(1) & 0xFF
         if key == ord('q'):
             break
+    picam.close()
     return tuple(contador_productos)
