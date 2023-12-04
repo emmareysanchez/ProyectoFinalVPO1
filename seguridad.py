@@ -38,12 +38,10 @@ def filtrado_verde(img):
 def establecer_color(imagen):
     verde = 1
     azul = 2
-    # amarillo = 3
     rojo = 3
     filtro_verde = filtrado_verde(imagen)
     fitro_azul = filtrado_azul(imagen)
     filtro_rojo = filtrado_rojo(imagen)
-    # filtro_amarillo = filtrado_amarillo(imagen)
 
     if fitro_azul > filtro_rojo and fitro_azul > filtro_verde:
         return azul
@@ -58,6 +56,7 @@ def establecer_color(imagen):
 def verificar_combinacion(imagenes) -> bool:
     # combinacion: azul, rojo, rojo, verde, azul
     # verde = 1, azul = 2, rojo = 3
+    colores = {1: 'Verde', 2: 'Azul', 3: 'Rojo'}
     combinacion = [2, 3, 3, 1, 2]
     lista_colores = list()
     for i in range(len(imagenes)):
@@ -69,7 +68,7 @@ def verificar_combinacion(imagenes) -> bool:
     else:
         verificacion = False
         mensaje = 'Combinacion Incorrecta'
-    print(mensaje)
+    print(colores[mensaje])
     return verificacion
 
 
