@@ -68,6 +68,7 @@ def dibujar_rectangulo(frame, templates):
 
 
 def contar_objetos(calibration_file, templates):
+    diccionario = {0: 'Nutella', 1: 'Mermelada', 2: 'Mantequilla de Cacahuete'}
     # Conectamos la camara y la configuramos
     picam = Picamera2()
     picam.preview_configuration.main.size = (500, 300)
@@ -96,7 +97,7 @@ def contar_objetos(calibration_file, templates):
                 flag_productos = [False for _ in range(len(templates))]
                 contador_productos[producto] += 1
                 flag_productos[producto] = True
-                print(producto)
+                print(f'Se ha detectado un tarro de {diccionario[producto]}.')
 
         cv2.imshow("picam", undistorted_frame)
         
@@ -104,14 +105,3 @@ def contar_objetos(calibration_file, templates):
         if key == ord('q'):
             break
     return tuple(contador_productos)
-
-
-if __name__ == '__main__':
-    imgN = cv2.imread('ImagenesObjetos/Nutella.jpg',cv2.IMREAD_GRAYSCALE)
-    imgM = cv2.imread('ImagenesObjetos/Mermelada2.png',cv2.IMREAD_GRAYSCALE)
-    imgC = cv2.imread('ImagenesObjetos/Cacahuete.jpg',cv2.IMREAD_GRAYSCALE)
-    templates = [imgN, imgM, imgC]
-    n_nutella, n_mermelada, n_cacahuete = contar_objetos('parametros_calibracion.npz', templates)
-    print(f'Cantidad de tarros de nutellas: {n_nutella}.')
-    print(f'Cantidad de tarros de mermeladas: {n_mermelada}.')
-    print(f'Cantidad de tarros de mantequillas de cacahuete: {n_cacahuete}.')
