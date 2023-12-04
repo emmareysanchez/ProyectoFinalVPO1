@@ -18,33 +18,56 @@ def undistort_image(image, camera_matrix, dist_coeffs):
 
 
 def encontrar_matches(img1, img2):
-    # Initiate SIFT detector
     sift = cv2.SIFT_create()
-    # find the keypoints and descriptors with SIFT
-    kp1, des1 = sift.detectAndCompute(img1,None)
-    kp2, des2 = sift.detectAndCompute(img2,None)
-    # BFMatcher with default params
+    kp1, des1 = sift.detectAndCompute(img1, None)
+    kp2, des2 = sift.detectAndCompute(img2, None)
     bf = cv2.BFMatcher()
-    matches = bf.knnMatch(des1,des2,k=2)
-    # Apply ratio test
-    good = []
-    for m,n in matches:
-        if m.distance < 0.60*n.distance:
-            good.append([m])
+    matches = bf.knnMatch(des1, des2, k=2)
+    good = [m for m, n in matches if m.distance < 0.60 * n.distance]
     return good, kp1, kp2
 
 
+# def encontrar_matches(img1, img2):
+#     # Initiate SIFT detector
+#     sift = cv2.SIFT_create()
+#     # find the keypoints and descriptors with SIFT
+#     kp1, des1 = sift.detectAndCompute(img1,None)
+#     kp2, des2 = sift.detectAndCompute(img2,None)
+#     # BFMatcher with default params
+#     bf = cv2.BFMatcher()
+#     matches = bf.knnMatch(des1,des2,k=2)
+#     # Apply ratio test
+#     good = []
+#     for m,n in matches:
+#         if m.distance < 0.60*n.distance:
+#             good.append(m)
+#     return good, kp1, kp2
+
+
 def objeto_en_frame(frame, templates):
-    matriz_matches = list()
-    for i in range(len(templates)):
-        matriz_matches.append([i, encontrar_matches(frame, templates[i])])
-    matches = [list(), None, None]
-    producto = -1
-    for i in matriz_matches:
-        if len(matches[0]) < len(i[1][0]) and len(i[1][0]) > 20:
-            matches = i[1]
-            producto = i[0]
+    matches_list = []
+    for i, template in enumerate(templates):
+        matches = encontrar_matches(frame, template)
+        matches_list.append([i, matches])
+
+    matches_list.sort(key=lambda x: len(x[1][0]), reverse=True)
+    producto, matches = matches_list[0][0], matches_list[0][1]
+    if len(matches[0]) <= 20:
+        producto, matches = -1, [[], None, None]
     return producto, matches
+
+
+# def objeto_en_frame(frame, templates):
+#     matriz_matches = list()
+#     for i in range(len(templates)):
+#         matriz_matches.append([i, encontrar_matches(frame, templates[i])])
+#     matches = [list(), None, None]
+#     producto = -1
+#     for i in matriz_matches:
+#         if len(matches[0]) < len(i[1][0]) and len(i[1][0]) > 20:
+#             matches = i[1]
+#             producto = i[0]
+#     return producto, matches
 
 
 def dibujar_rectangulo(frame, templates):
@@ -55,8 +78,8 @@ def dibujar_rectangulo(frame, templates):
         kp_frame = matches_list[1]
         kp_template = matches_list[2]
         # Obtener las coordenadas de los keypoints en el frame y el template
-        pts_frame = np.float32([kp_frame[m[0].queryIdx].pt for m in matches]).reshape(-1, 1, 2)
-        pts_template = np.float32([kp_template[m[0].trainIdx].pt for m in matches]).reshape(-1, 1, 2)
+        pts_frame = np.float32([kp_frame[m.queryIdx].pt for m in matches]).reshape(-1, 1, 2)
+        pts_template = np.float32([kp_template[m.trainIdx].pt for m in matches]).reshape(-1, 1, 2)
     
         # Calcular la homografía entre el frame y el template
         M, _ = cv2.findHomography(pts_template, pts_frame, cv2.RANSAC, 5.0)
@@ -109,11 +132,8 @@ def contar_objetos(calibration_file, templates):
         
         key = cv2.waitKey(1) & 0xFF
         if key == ord('q'):
-            print(f'Cantidad de tarros de nutellas: {contador_productos[0]}.')
-            print(f'Cantidad de tarros de mermeladas: {contador_productos[1]}.')
-            print(f'Cantidad de tarros de mantequillas de cacahuete: {contador_productos[2]}.')
             break
-    return contador_productos[0], contador_productos[1], [2]
+    return tuple(contador_productos)
 
 
 if __name__ == '__main__':
@@ -121,4 +141,7 @@ if __name__ == '__main__':
     imgM = cv2.imread('ImagenesObjetos/Mermelada.jpg',cv2.IMREAD_GRAYSCALE)
     imgC = cv2.imread('ImagenesObjetos/Cacahuete.jpg',cv2.IMREAD_GRAYSCALE)
     templates = [imgN, imgM, imgC]
-    
+    n_nutella, n_mermelada, n_cacahuete = contar_objetos('parametros_calibracion.npz', templates)
+    print(f'Cantidad de tarros de nutellas: {n_nutella}.')
+    print(f'Cantidad de tarros de mermeladas: {n_mermelada}.')
+    print(f'Cantidad de tarros de mantequillas de cacahuete: {n_cacahuete}.')
