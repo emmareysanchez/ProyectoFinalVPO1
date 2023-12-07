@@ -36,7 +36,9 @@ def calibracion():
             img_points.append(corners)
 
     # Calibrar la cámara
-    ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(obj_points, img_points, gray.shape[::-1], None, None)
+    ret, mtx, dist, _, _ = cv2.calibrateCamera(obj_points, img_points, gray.shape[::-1], None, None)
+
+    print('El rms standart vale', ret)
 
     nombre = 'parametros_calibracion.npz'
 
@@ -46,3 +48,4 @@ def calibracion():
     print(f'Calibración completada. Parámetros guardados en {nombre}')
     return nombre
 
+calibracion()
