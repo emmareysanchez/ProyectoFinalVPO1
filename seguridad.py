@@ -56,7 +56,6 @@ def establecer_color(imagen):
 def verificar_combinacion(imagenes) -> bool:
     # combinacion: azul, rojo, rojo, verde, azul
     # verde = 1, azul = 2, rojo = 3
-    colores = {1: 'Verde', 2: 'Azul', 3: 'Rojo'}
     combinacion = [2, 3, 3, 1, 2]
     lista_colores = list()
     for i in range(len(imagenes)):
@@ -64,11 +63,11 @@ def verificar_combinacion(imagenes) -> bool:
         lista_colores.append(establecer_color(img))
     if lista_colores == combinacion:
         verificacion = True
-        mensaje = 'Combinacion correcta'
+        mensaje = 'Combinacion correcta.\n'
     else:
         verificacion = False
-        mensaje = 'Combinacion Incorrecta'
-    print(colores[mensaje])
+        mensaje = 'Combinacion Incorrecta. Vuelva a intentarlo.\n'
+    print(mensaje)
     return verificacion
 
 
@@ -91,6 +90,7 @@ def undistort_image(image, camera_matrix, dist_coeffs):
 
 def introducir_codigo(calibration_file):
     # Conectamos la camara y la configuramos
+    colores = {1: '- Verde', 2: '- Azul', 3: '- Rojo'}
     picam = Picamera2()
     picam.preview_configuration.main.size = (500, 300)
     picam.preview_configuration.main.format = "RGB888"
@@ -109,7 +109,7 @@ def introducir_codigo(calibration_file):
         key = cv2.waitKey(1) & 0xFF
         if key == ord(' '):
             # Mandar imagen
-            print(establecer_color(undistorted_frame))
+            print(colores[establecer_color(undistorted_frame)])
             imagenes.append(undistorted_frame)
             if len(imagenes) == 5:
                 combinacion_correcta = verificar_combinacion(imagenes)

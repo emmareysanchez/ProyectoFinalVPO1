@@ -87,7 +87,7 @@ def contar_objetos(calibration_file, templates):
         undistorted_frame = undistort_image(frame, camera_matrix, dist_coeffs)
         undistorted_frame, producto = dibujar_rectangulo(undistorted_frame, templates)
         if producto == -1:
-            if contador < 2:
+            if contador < 3:
                 contador += 1
             else:
                 flag_productos = [False for _ in range(len(templates))]
@@ -97,7 +97,7 @@ def contar_objetos(calibration_file, templates):
                 flag_productos = [False for _ in range(len(templates))]
                 contador_productos[producto] += 1
                 flag_productos[producto] = True
-                print(f'Se ha detectado un tarro de {diccionario[producto]}.')
+                print(f'- Se ha detectado un tarro de {diccionario[producto]}.')
 
         cv2.imshow("picam", undistorted_frame)
         
