@@ -11,9 +11,9 @@ if __name__ == '__main__':
 
     fichero_calibracion = calibracion()
     introducir_codigo(fichero_calibracion)
-    print('Prueba de seguridad pasada.')
 
     n_nutella, n_mermelada, n_cacahuete = contar_objetos(fichero_calibracion, templates)
-    print(f'Cantidad de tarros de nutellas: {n_nutella}.')
-    print(f'Cantidad de tarros de mermeladas: {n_mermelada}.')
-    print(f'Cantidad de tarros de mantequillas de cacahuete: {n_cacahuete}.')
+    print('\nFin del conteo de productos.')
+    print(f'+ Cantidad de tarros de nutellas: {n_nutella}.')
+    print(f'+ Cantidad de tarros de mermeladas: {n_mermelada}.')
+    print(f'+ Cantidad de tarros de mantequillas de cacahuete: {n_cacahuete}.')

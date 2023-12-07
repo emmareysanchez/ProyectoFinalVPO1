@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 
 def calibracion():
+    print('Iniciando calibración')
     circle_board_size = (5, 4) # Tamaño del tablero circular
     circle_size_mm = 50
 
@@ -45,7 +46,5 @@ def calibracion():
     # Guardar los parámetros de calibración en un archivo
     np.savez(nombre, mtx=mtx, dist=dist)
 
-    print(f'Calibración completada. Parámetros guardados en {nombre}')
+    print(f'Calibración completada. Parámetros guardados en {nombre}.\n')
     return nombre
-
-calibracion()
