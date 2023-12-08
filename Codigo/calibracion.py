@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 
 def calibracion():
-    print('Iniciando calibración')
+    print('Iniciando calibración...\n')
     circle_board_size = (5, 4) # Tamaño del tablero circular
     circle_size_mm = 50
 
@@ -37,9 +37,11 @@ def calibracion():
             img_points.append(corners)
 
     # Calibrar la cámara
-    ret, mtx, dist, _, _ = cv2.calibrateCamera(obj_points, img_points, gray.shape[::-1], None, None)
+    rms, mtx, dist, _, _ = cv2.calibrateCamera(obj_points, img_points, gray.shape[::-1], None, None)
 
-    print('El rms standart vale', ret)
+    print("Matriz de intrínsecos:\n", mtx)
+    print("Coeficientes de distorsión:\n", dist)
+    print("root mean square reprojection error:\n", rms)
 
     nombre = 'parametros_calibracion.npz'
 
