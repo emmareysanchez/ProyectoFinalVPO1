@@ -13,7 +13,7 @@ def stream_video():
         frame = picam.capture_array()
         cv2.imshow("picam", frame)
         if cv2.waitKey(1) & 0xFF == ord('h'):
-            cv2.imwrite(f'NombreImagen{n_imagen}.jpg', frame)
+            cv2.imwrite(f'ImagenesCalibracion/NombreImagen{n_imagen}.jpg', frame)
             n_imagen += 1
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
