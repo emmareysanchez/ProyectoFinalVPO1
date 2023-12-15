@@ -30,4 +30,4 @@ Contiene el código desarrollado para la realización del proyecto final de la a
 - `PatronCalibracion.pdf`: PDF conteniendo el patrón de calibración utilizado. Contiene 20 círculos distribuidos en 4 filas y 5 columnas de tal forma que los centros de estos están separados por 5 cm de distancia.
 - `Informe.pdf`: PDF conteniendo el informe del proyecto.
 - `DiagramaProyecto.png`: Imagen del diagrama de bloques del sistema desarrollado.
-- `VideoDemo.mkv`: Video de ejemplo mostrando el funcionamiento general del proyecto.
+- `VideoDemo.mp4`: Video de ejemplo mostrando el funcionamiento general del proyecto.
